@@ -1,9 +1,11 @@
 pub mod auth;
+pub mod authenticator;
 pub mod cloud;
 pub mod error;
 pub mod identity;
 pub mod nodes;
 pub mod old;
+pub mod signer;
 pub mod vault;
 
 mod util;
@@ -124,6 +126,7 @@ pub enum Status {
     #[n(200)] Ok,
     #[n(400)] BadRequest,
     #[n(401)] Unauthorized,
+    #[n(403)] Forbidden,
     #[n(404)] NotFound,
     #[n(405)] MethodNotAllowed,
     #[n(500)] InternalServerError,
@@ -241,6 +244,14 @@ impl Response {
 
     pub fn not_implemented(re: Id) -> ResponseBuilder {
         Response::builder(re, Status::NotImplemented)
+    }
+
+    pub fn unauthorized(re: Id) -> ResponseBuilder {
+        Response::builder(re, Status::Unauthorized)
+    }
+
+    pub fn internal_error(re: Id) -> ResponseBuilder {
+        Response::builder(re, Status::InternalServerError)
     }
 
     pub fn id(&self) -> Id {
